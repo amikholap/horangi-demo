@@ -186,3 +186,23 @@ Response:
   "status": "success"
 }
 ```
+
+
+## Data access patterns
+
+Designing for optimal performace requires knowledge of the ways the data are read and written.  
+It determines the choice of data structures and storage technologies.
+
+For a social network feed we have:
+
+#### 1. List of people that a user follows
+Required to filter the global activity feed.
+
+#### 2. List of user's actions and related actions ordered by time
+It's the user's own feed.
+
+#### 3. List of friends' actions and related actions
+It's the user's friends feed.
+
+#### 4. Access by id for all objects
+Not required by the current API but likely to be useful in the future.
