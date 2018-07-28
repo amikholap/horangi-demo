@@ -85,22 +85,7 @@ Response:
         "verb": "post",
         "object": "post:2",
         "content": "The second post.",
-        "datetime": "2018-07-25T19:55:33",
-        "related":
-          [
-            {
-              "actor": "niko",
-              "verb": "like",
-              "object": "post:2",
-              "content": null
-            },
-            {
-              "actor": "eric",
-              "verb": "like",
-              "object": "post:2",
-              "content": null
-            }
-          ]
+        "datetime": "2018-07-25T19:55:33"
       },
       ...
     ],
@@ -164,25 +149,36 @@ Response:
         "verb": "post",
         "object": "post:3",
         "content": "The third post.",
-        "datetime": "2018-07-25T19:55:33",
-        "related":
-          [
-            {
-              "actor": "niko",
-              "verb": "like",
-              "object": "post:3",
-              "content": null
-            },
-            {
-              "actor": "ivan",
-              "verb": "like",
-              "object": "post:3",
-              "content": null
-            }
-          ]
+        "datetime": "2018-07-25T19:55:33"
       },
       ...
     ],
+  "status": "success"
+}
+```
+
+#### 5. Get related actions for a post.
+
+Request:  
+```GET /api/posts/{post_id}/related/```
+
+Response:
+```
+{
+  "data": [
+    {
+      "actor": "niko",
+      "verb": "like",
+      "object": "post:3",
+      "content": null
+    },
+    {
+      "actor": "ivan",
+      "verb": "like",
+      "object": "post:3",
+      "content": null
+    }
+  ],
   "status": "success"
 }
 ```
@@ -251,7 +247,7 @@ To store a list of related actions for posts for the last week we'd need this am
 To serve the related actions for a feed I'd suggest another API endpoint that accepts a list of post ids and returns the related actions.  
 It would allow to start rendering the feed on client's device while fetching additional information in the background.
 
-Yet if the list of related actions is used only to present counters and stats to the user it would be better to store the aggregated counters and stats themselves.  
+Yet if the list of related actions is used only to present counters and stats to the user it would be better to store the aggregated counters and stats itselves.  
 A post may have tens of thouthands of likes/shares and having several such posts in your feed would result in slow load times and extra battery usage due to deserializing large volume of JSON data.
 
 #### SQL vs NoSQL
