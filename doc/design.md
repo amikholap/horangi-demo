@@ -247,4 +247,4 @@ Current data access doesn't imply any complex joins or unavoidable transactions 
 The most common pattern is sequential access that can be effectively handled by clustering the data.  
 The main advantages of NoSQL solutions are better performance within the allowed set of operations and native (re-)sharding support.  
 Good candidates are Apache Cassandra and Amazon DynamoDB.  
-The latter has Amazon DynamoDB Accelerator feature with enables easy to setup caching layer for common queries.  
+The latter has Amazon DynamoDB Accelerator feature with enables easy to setup caching layer for frequent queries.  
