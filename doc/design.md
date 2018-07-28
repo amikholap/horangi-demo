@@ -42,12 +42,9 @@ Request:
   {
     "actor: "ivan",
     "verb": "like",
-    "object": "post",
-    "content": "The first post."
+    "object": "post:1",
   }
 ```
-
-Content is an optional field that is allowed only for `object=post` requests.
 
 Response:
 ```
@@ -57,7 +54,6 @@ Response:
         "actor: "ivan",
         "verb": "like",
         "object": "post:1",
-        "content": "The first post."
       },
     "status": "success"
   }
@@ -77,14 +73,12 @@ Response:
         "actor": "ivan",
         "verb": "share",
         "object": "post:1",
-        "content": null,
         "datetime": "2018-07-25T18:35:22"
       },
       {
         "actor": "ivan",
         "verb": "post",
         "object": "post:2",
-        "content": "The second post.",
         "datetime": "2018-07-25T19:55:33"
       },
       ...
@@ -141,14 +135,12 @@ Response:
         "actor": "nico",
         "verb": "share",
         "object": "post:2",
-        "content": null,
         "datetime": "2018-07-25T18:35:22"
       },
       {
         "actor": "eric",
         "verb": "post",
         "object": "post:3",
-        "content": "The third post.",
         "datetime": "2018-07-25T19:55:33"
       },
       ...
@@ -169,14 +161,12 @@ Response:
     {
       "actor": "niko",
       "verb": "like",
-      "object": "post:3",
-      "content": null
+      "object": "post:3"
     },
     {
       "actor": "ivan",
       "verb": "like",
-      "object": "post:3",
-      "content": null
+      "object": "post:3"
     }
   ],
   "status": "success"
