@@ -1,3 +1,5 @@
+import cassandra.cluster
+
 from .base import BaseDataProvider
 
 
@@ -7,11 +9,26 @@ class User:
         self.username = username
 
 
-class StubUsersDataProvider(BaseDataProvider):
+class CassandraDataProvider(BaseDataProvider):
 
-    @classmethod
-    def from_settings(cls):
-        return cls()
+    def __init__(self, hosts, keyspace):
+        self._cluster = cassandra.cluster.Cluster(hosts)
+        self._session = self._cluster.connect()
+        self._session.set_keyspace(keyspace)
+
+    def get_users(self):
+        users = []
+        for (username,) in self._session.execute('SELECT username FROM user'):
+            user = User(username)
+            users.append(user)
+        return users
+
+    def create_user(self, username):
+        self._session.execute('INSERT INTO user (username) VALUES (%s)', [username])
+        return User(username=username)
+
+
+class StubUsersDataProvider(BaseDataProvider):
 
     def __init__(self):
         self.users = {}

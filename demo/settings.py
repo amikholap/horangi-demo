@@ -122,11 +122,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+CASSANDRA = {
+    'hosts': [
+        'localhost',
+    ],
+    'keyspace': 'demo',
+}
+
+
 APP = {
     'users': {
         'data_provider': {
-            'class': 'demo.core.users.StubUsersDataProvider',
-            'params': {},
+            'class': 'demo.core.users.CassandraDataProvider',
+            'params': CASSANDRA,
         },
     },
 }
