@@ -1,7 +1,7 @@
 # Social network activity feed
 
 The goal of this design document is to provide quantitative estimates and implementation overview of a social network activity feed.  
-Requirements – https://gist.github.com/ivanchoo/9d9a6d6b3beef0c6d9fa2bb168202555
+Requirements https://gist.github.com/ivanchoo/9d9a6d6b3beef0c6d9fa2bb168202555
 
 ## Numbers
 
@@ -43,6 +43,7 @@ Request:
     "actor: "ivan",
     "verb": "like",
     "object": "post:1",
+    "target": "nico"
   }
 ```
 
@@ -54,6 +55,8 @@ Response:
         "actor: "ivan",
         "verb": "like",
         "object": "post:1",
+        "target": "nico",
+        "datetime": "2018-07-25T18:35:22"
       },
     "status": "success"
   }
@@ -73,12 +76,14 @@ Response:
         "actor": "ivan",
         "verb": "share",
         "object": "post:1",
+        "target": "nico",
         "datetime": "2018-07-25T18:35:22"
       },
       {
         "actor": "ivan",
         "verb": "post",
         "object": "post:2",
+        "target": null,
         "datetime": "2018-07-25T19:55:33"
       },
       ...
@@ -135,12 +140,14 @@ Response:
         "actor": "nico",
         "verb": "share",
         "object": "post:2",
+        "target": "ivan",
         "datetime": "2018-07-25T18:35:22"
       },
       {
         "actor": "eric",
         "verb": "post",
         "object": "post:3",
+        "target": null,
         "datetime": "2018-07-25T19:55:33"
       },
       ...
@@ -161,12 +168,14 @@ Response:
     {
       "actor": "niko",
       "verb": "like",
-      "object": "post:3"
+      "object": "post:3",
+      "target": "eric"
     },
     {
       "actor": "ivan",
       "verb": "like",
-      "object": "post:3"
+      "object": "post:3",
+      "target": "nico"
     }
   ],
   "status": "success"
@@ -228,7 +237,7 @@ We'd need to store contents of posts as well to effectively serve the feed.
 Let's assume that posts comprise 25% of users' activity and their average length is 512B.  
 To store caches for all 300M daily active users we'd need this amount of RAM:  
 `300M * 10 * 3 * (92B + 512B * 0.25) = ~2TB` 
-> This amount of RAM is readily available on modern hardware and the scale is achievable with in-memory data grids such as Redis or Hazelcast.
+This amount of RAM is readily available on modern hardware and the scale is achievable with in-memory data grids such as Redis or Hazelcast.
 
 To enrich the feed with related objects I'd go with another caching layer to store mappings of relations `post_id -> list<action>`.  
 To store a list of related actions for posts for the last week we'd need this amount of RAM:  
