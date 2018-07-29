@@ -33,8 +33,7 @@ This would result in
 
 The system must support the following API methods:
 
-#### 1. Submit a typed action (post, like, share).  
-*Note: I've omitted `target` field mentioned in the requirements since it can be inferred from the object. Allowing to specify another target would result in undefined behaviour. It was probably left from follow/unfollow activities which were extracted to separate endpoints.*
+#### 1. Submit a typed action (post, like, share).
 
 Request:
 ```
@@ -92,7 +91,7 @@ Response:
 }
 ```
 
-#### 3. Follow / unfollow
+#### 3. Follow / unfollow.
 
 Request:
 ```
