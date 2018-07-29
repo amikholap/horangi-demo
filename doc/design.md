@@ -10,18 +10,18 @@ Let's design for a successfull social network with active users and make the fol
   * 300M DAU.
   * An average user
     * submits 2 posts and 5 likes/shares a day.
+    * follows/unfollows 15 other users per month or 1/2 a day.
     * checks his friends' feed 10 times a day.
-    * follows/unfollows 15 other users per month.
-  * An average post is 512 characters long.
+  * Each activity item takes 92 bytes to store (actor=32B + verb=8B + object=16B + target=32B + timestamp=4B).
+  * Follow relationship takes 68B to store (followee=32B + follower=32B + timestamp=4B).
 
 This would result in
-  * 600M new posts and 1,5B likes/shares every day.
-  * Assuming an even load from the global audience it would be ~7k new posts and ~17k likes/shares per second.
+  * ~2.3B new activity items every day.
+  * Assuming an even load from the global audience it would be ~27k new activity items per second.
   * And ~35k friends' feed requests per second.
   * And ~3k follow/unfollow operations per second.
-  * Assuming 69B of metadata per action (32B user UUID, 32B post UUID, 4B timestamp, 1B action type) the write load would be ~4MB/s for posts and ~1MB/s for likes/shares summing up to 5MB/s of activity data.
-  * Or 421GB of activity data per day.
-  * Follow/unfollow operations add extra 68B metadata * 3k op/sec = ~0.2MB/s = ~17GB/day.
+  * The write load would be ~2.5MB/s or ~200GB/day.
+  * Follow/unfollow operations add extra 68B * 3k op/sec = ~0.2MB/s = ~17GB/day.
 
 
 ## API
@@ -201,7 +201,7 @@ API backend is stateless and should be rather generic so I'll focus on effective
 
 The simplest way to go is to use just a single (possibly replicated) SQL database such as Oracle, PostgresSQL or Amazon Aurora.  
 It would support all required functionality, provide data consistency with transactions and effective queries with indexes.  
-Yet the estimated data volume of about 400GB/day is overwhelming for an out-of-the-box relational database deployment.  
+Yet the estimated data volume of about 200GB/day is overwhelming for an out-of-the-box relational database deployment.  
 It's probably too much for any database accepting writes and keeping all the data on a single node.
 
 An obvious solution is to shard the dataset.  
@@ -223,15 +223,16 @@ To avoid the percieved delay when posting an activity we can update the caches a
 A good choice of a queueing system would be Kafka or Amazon Kinesis due to their ability to shard data flows into multiple partitions spreading read and write loads.
 
 Let's assume that feed page size is 10 items and it's enough to store the first 3 pages of the feed in cache.  
-Further pages need to be served from the disk of other shards.
+Further pages need to be served from the disk of other shards.  
+We'd need to store contents of posts as well to effectively serve the feed.  
+Let's assume that posts comprise 25% of users' activity and their average length is 512B.  
 To store caches for all 300M daily active users we'd need this amount of RAM:  
-`300M * 10 * 3 * (2/5 * 581B + 3/5 * 69B) = ~2.4TB`
-> I've assumed that 2/5 of the feed are posts of 581B and 3/5 are likes/shares of 69B.  
+`300M * 10 * 3 * (92B + 512B * 0.25) = ~2TB` 
 > This amount of RAM is readily available on modern hardware and the scale is achievable with in-memory data grids such as Redis or Hazelcast.
 
 To enrich the feed with related objects I'd go with another caching layer to store mappings of relations `post_id -> list<action>`.  
 To store a list of related actions for posts for the last week we'd need this amount of RAM:  
-`600M * 7 * 69B * 16 = 4.5TB`
+`2.3B * 0.25 * 7 * 92B * 16 = ~6TB`
 > Assuming an average post has 16 related actions.
 
 To serve the related actions for a feed I'd suggest another API endpoint that accepts a list of post ids and returns the related actions.  
@@ -247,4 +248,4 @@ Current data access doesn't imply any complex joins or unavoidable transactions 
 The most common pattern is sequential access that can be effectively handled by clustering the data.  
 The main advantages of NoSQL solutions are better performance within the allowed set of operations and native (re-)sharding support.  
 Good candidates are Apache Cassandra and Amazon DynamoDB.  
-The latter has Amazon DynamoDB Accelerator feature with enables easy to setup caching layer for frequent queries.  
+The latter has Amazon DynamoDB Accelerator feature with enables easy to setup caching layer for frequent queries.
