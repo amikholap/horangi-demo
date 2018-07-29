@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: horangi-demo
+spec:
+  selector:
+    matchLabels:
+      app: horangi-demo
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: horangi-demo
+    spec:
+      containers:
+      - name: web
+        image: carabas/horangi-demo:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "100m"
+            memory: "128M"
+          requests:
+            cpu: "100m"
+            memory: "128M"
