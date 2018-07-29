@@ -26,3 +26,4 @@ column|type
 id|uuid
 verb|text
 object|text
+target_username|text
