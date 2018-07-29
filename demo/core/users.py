@@ -30,8 +30,11 @@ class CassandraDataProvider(BaseDataProvider):
 
 class StubUsersDataProvider(BaseDataProvider):
 
-    def __init__(self):
-        self.users = {}
+    users = {}
+
+    @classmethod
+    def clear(cls):
+        cls.users = {}
 
     def get_users(self):
         return list(self.users.values())
