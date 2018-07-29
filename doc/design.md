@@ -42,7 +42,7 @@ Request:
     "actor: "ivan",
     "verb": "like",
     "object": "post:1",
-    "target": "nico"
+    "target": "niko"
   }
 ```
 
@@ -54,7 +54,7 @@ Response:
         "actor: "ivan",
         "verb": "like",
         "object": "post:1",
-        "target": "nico",
+        "target": "niko",
         "datetime": "2018-07-25T18:35:22"
       },
     "status": "success"
@@ -75,7 +75,7 @@ Response:
         "actor": "ivan",
         "verb": "share",
         "object": "post:1",
-        "target": "nico",
+        "target": "niko",
         "datetime": "2018-07-25T18:35:22"
       },
       {
@@ -97,7 +97,8 @@ Request:
 ```
 POST /api/follow/
 {
-  "user": "niko"
+  "followee": "niko",
+  "follower": "ivan"
 }
 ```
 
@@ -113,7 +114,8 @@ Request:
 ```
 POST /api/unfollow/
 {
-  "user": "niko"
+  "followee": "niko",
+  "follower": "ivan"
 }
 ```
 
@@ -136,7 +138,7 @@ Response:
   "data" :
     [
       {
-        "actor": "nico",
+        "actor": "niko",
         "verb": "share",
         "object": "post:2",
         "target": "ivan",
@@ -174,7 +176,7 @@ Response:
       "actor": "ivan",
       "verb": "like",
       "object": "post:3",
-      "target": "nico"
+      "target": "niko"
     }
   ],
   "status": "success"
