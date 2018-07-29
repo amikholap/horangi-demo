@@ -1,0 +1,4 @@
+cassandra-driver==3.14.0
+Django==2.0.7
+djangorestframework==3.8.2
+uWSGI==2.0.17.1
