@@ -1,0 +1,11 @@
+# Base image for horangi-demo project.
+# It should be rebuilt on changes in Python dependencies.
+
+FROM python:3.6
+
+RUN apt-get update --quiet=1
+RUN apt-get install --assume-yes nginx
+
+COPY setup.py /tmp/horangi-demo/setup.py
+RUN cd /tmp/horangi-demo \
+    && pip3 install .
