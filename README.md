@@ -1,2 +1,2 @@
 # horangi-demo
-Demo social network activity feed.
+Demo social network activity feed
