@@ -7,9 +7,9 @@ class BaseDataProvider:
 
     @classmethod
     def from_settings(cls, dp_settings):
-        dp_class = import_class(dp_settings['class'])
-        dp = dp_class(**dp_settings['params'])
-        return dp
+        provider_class = import_class(dp_settings['class'])
+        provider = provider_class(**dp_settings['params'])
+        return provider
 
 
 class BaseCassandraDataProvider(BaseDataProvider):

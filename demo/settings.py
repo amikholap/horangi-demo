@@ -130,13 +130,9 @@ CASSANDRA = {
 
 
 DATA_PROVIDERS = {
-    # 'action': {
-    #     'class': 'demo.core.data_providers.action.CassandraActionDataProvider',
-    #     'params': CASSANDRA,
-    # },
     'action': {
-        'class': 'demo.core.data_providers.action.StubActionDataProvider',
-        'params': {},
+        'class': 'demo.core.data_providers.action.CassandraActionDataProvider',
+        'params': CASSANDRA,
     },
     'follow': {
         'class': 'demo.core.data_providers.follow.CassandraFollowDataProvider',
