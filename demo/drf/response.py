@@ -5,6 +5,8 @@ class DemoResponse(Response):
 
     def __init__(self, data=None, errors=None, **kwargs):
         if errors is not None:
+            if isinstance(errors, str):
+                errors = [errors]
             data = {
                 'status': 'error',
                 'errors': errors,

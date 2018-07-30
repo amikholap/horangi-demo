@@ -1,5 +1,13 @@
 from .settings import *
 
 
-APP['users']['data_provider']['class'] = 'demo.core.users.StubUsersDataProvider'
-APP['users']['data_provider']['params'] = {}
+DATA_PROVIDERS = {
+    'follow': {
+        'class': 'demo.core.data_providers.follow.StubFollowDataProvider',
+        'params': {},
+    },
+    'user': {
+        'class': 'demo.core.data_providers.user.StubUserDataProvider',
+        'params': {},
+    },
+}

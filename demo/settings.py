@@ -124,17 +124,20 @@ STATIC_URL = '/static/'
 
 CASSANDRA = {
     'hosts': [
+        # 'cassandra-0',
         'localhost',
     ],
     'keyspace': 'demo',
 }
 
 
-APP = {
-    'users': {
-        'data_provider': {
-            'class': 'demo.core.users.CassandraDataProvider',
-            'params': CASSANDRA,
-        },
+DATA_PROVIDERS = {
+    'follow': {
+        'class': 'demo.core.data_providers.follow.CassandraFollowDataProvider',
+        'params': CASSANDRA,
+    },
+    'user': {
+        'class': 'demo.core.data_providers.user.CassandraUserDataProvider',
+        'params': CASSANDRA,
     },
 }
