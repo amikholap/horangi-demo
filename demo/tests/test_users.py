@@ -90,3 +90,10 @@ class FollowTestCase(DemoAPITestCase):
         self.follow('a', 'b')
         response = self.unfollow('a', 'b')
         self.assertResponseSuccess(response)
+
+    def test_unfollow_twice_ok(self):
+        self.follow('a', 'b')
+        response1 = self.unfollow('a', 'b')
+        self.assertResponseSuccess(response1)
+        response2 = self.unfollow('a', 'b')
+        self.assertResponseSuccess(response2)

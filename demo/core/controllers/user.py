@@ -51,9 +51,7 @@ class UserController(BaseController):
             raise self.Error('followee.invalid')
         if self.user_dp.get(follower) is None:
             raise self.Error('follower.invalid')
-        if self.follow_dp.get_follow(followee, follower) is None:
-            raise self.Error('not_followed')
 
-        if not self.follow_dp.delete(follower, follower):
+        if not self.follow_dp.delete(followee, follower):
             # Don't raise an error to keep the operation idempotent.
             LOGGER.info('tried to delete nonexistent follow %s -> %s', followee, follower)
