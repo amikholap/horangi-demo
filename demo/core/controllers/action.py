@@ -43,4 +43,7 @@ class ActionController(BaseController):
             target_username=target,
         )
 
+        # At this point the action should be submitted
+        # to a persistent distibuted queue for further async processing like updating caches.
+
         return action

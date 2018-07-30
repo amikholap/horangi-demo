@@ -64,7 +64,7 @@ Response:
 #### 2. Get user's own activity feed.
 
 Request:  
-```GET /api/my-feed/?page={page}```
+```GET /api/my-feed/?actor={username}&page={page}&page_size={page_size}```
 
 Response:
 ```
@@ -130,7 +130,7 @@ Response:
 #### 4. Get user friends' activity feed.
 
 Request:  
-```GET /api/friends-feed/?page={page}```
+```GET /api/friends-feed/?actor={username}&page={page}&page_size={page_size}```
 
 Response:
 ```

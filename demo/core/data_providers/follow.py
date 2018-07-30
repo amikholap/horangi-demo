@@ -24,6 +24,26 @@ class CassandraFollowDataProvider(BaseCassandraDataProvider):
 
         return follow
 
+    def get_followees(self, username):
+        """
+        Get all people that a username follows.
+
+        Slow since the request touches every partition.
+        The result should be cached.
+        """
+
+        query = (
+            'SELECT followee_username '
+            'FROM follow '
+            'WHERE follower_username = %s '
+            'ALLOW FILTERING'
+        )
+
+        results = self._session.execute(query, [username])
+        followees = [row.followee_username for row in results]
+
+        return followees
+
     def create(self, followee, follower, created_at):
         query = (
             'INSERT INTO follow '
@@ -68,8 +88,12 @@ class StubFollowDataProvider(BaseDataProvider):
                 return follow
         return None
 
-    def get_followers(self, username):
-        return self.follows[username]
+    def get_followees(self, username):
+        return {
+            followee
+            for followee, follows in self.follows.items()
+            if username in {f.follower for f in follows}
+        }
 
     def create(self, followee, follower, created_at):
         follow = Follow(

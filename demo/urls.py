@@ -8,9 +8,10 @@ api_urlpatterns = (
     [
         path('actions/', views.ActionListAPIView.as_view(), name='action-list'),
         path('my-feed/', views.MyActionFeedAPIView.as_view(), name='my-feed'),
-        path('users/', views.UserListAPIView.as_view(), name='user-list'),
+        path('friends-feed/', views.FriendsActionFeedAPIView.as_view(), name='friends-feed'),
         path('follow/', views.FollowApiView.as_view(), name='follow'),
         path('unfollow/', views.UnfollowApiView.as_view(), name='unfollow'),
+        path('users/', views.UserListAPIView.as_view(), name='user-list'),
     ],
     'demo',
 )
