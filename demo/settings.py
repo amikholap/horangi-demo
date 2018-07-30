@@ -122,8 +122,7 @@ STATIC_URL = '/static/'
 
 CASSANDRA = {
     'hosts': [
-        # 'cassandra-0',
-        'localhost',
+        'cassandra-0',
     ],
     'keyspace': 'demo',
 }
