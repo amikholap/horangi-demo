@@ -1,4 +1,4 @@
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import MethodNotAllowed, ValidationError
 from rest_framework.views import APIView
 
 from .response import DemoResponse
@@ -8,11 +8,11 @@ class DemoAPIView(APIView):
 
     arguments_serializer_class = None
 
-    def do_get(self, request):
-        raise NotImplementedError
+    def do_get(self, request):  # pylint: disable=unused-argument,useless-return
+        return None
 
-    def do_post(self, request):
-        raise NotImplementedError
+    def do_post(self, request):  # pylint: disable=unused-argument,useless-return
+        return None
 
     def get(self, request):
         try:
@@ -22,7 +22,9 @@ class DemoAPIView(APIView):
 
         request.arguments = arguments
 
-        response = self.do_get(request)
+        response = self.do_get(request)  # pylint: disable=assignment-from-none
+        if response is None:
+            raise MethodNotAllowed
 
         return response
 
@@ -34,18 +36,21 @@ class DemoAPIView(APIView):
 
         request.arguments = arguments
 
-        response = self.do_post(request)
+        response = self.do_post(request)  # pylint: disable=assignment-from-none
+        if response is None:
+            raise MethodNotAllowed
 
         return response
 
-    def get_arguments_serializer_class(self, request):
+    def get_arguments_serializer_class(self, request):  # pylint: disable=unused-argument
         return self.arguments_serializer_class
 
     def _get_arguments(self, request):
         arguments = None
         serializer_class = self.get_arguments_serializer_class(request)
         if serializer_class is not None:
-            serializer = serializer_class(data=request.data)
+            data = request.query_params if request.method == 'GET' else request.data
+            serializer = serializer_class(data=data)  # pylint: disable=not-callable
             serializer.is_valid(raise_exception=True)
             arguments = serializer.data
         return arguments

@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
-from demo.util import import_class
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -132,6 +130,14 @@ CASSANDRA = {
 
 
 DATA_PROVIDERS = {
+    # 'action': {
+    #     'class': 'demo.core.data_providers.action.CassandraActionDataProvider',
+    #     'params': CASSANDRA,
+    # },
+    'action': {
+        'class': 'demo.core.data_providers.action.StubActionDataProvider',
+        'params': {},
+    },
     'follow': {
         'class': 'demo.core.data_providers.follow.CassandraFollowDataProvider',
         'params': CASSANDRA,
