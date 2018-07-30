@@ -1,6 +1,9 @@
 from django.urls import reverse
 
+from demo.core.controllers.action import ActionController
 from demo.core.controllers.user import UserController
+from demo.core.data_providers.action import StubActionDataProvider
+from demo.core.data_providers.follow import StubFollowDataProvider
 from demo.core.data_providers.user import StubUserDataProvider
 from demo.drf.test import DemoAPITestCase
 
@@ -43,10 +46,16 @@ class FollowTestCase(DemoAPITestCase):
 
     def setUp(self):
         super().setUp()
+
+        StubActionDataProvider.clear()
+        StubFollowDataProvider.clear()
         StubUserDataProvider.clear()
+
         controller = UserController.from_settings()
         controller.create_user(username='a')
         controller.create_user(username='b')
+
+        self.action_controller = ActionController.from_settings()
 
     def follow(self, followee, follower):
         data = {
@@ -97,3 +106,29 @@ class FollowTestCase(DemoAPITestCase):
         self.assertResponseSuccess(response1)
         response2 = self.unfollow('a', 'b')
         self.assertResponseSuccess(response2)
+
+    def test_follow_creates_action(self):
+        self.follow('a', 'b')
+        actions = self.action_controller.action_dp.list(
+            actor_username='b',
+            page=0,
+            page_size=10,
+        )
+        self.assertEqual(len(actions), 1)
+
+        action = actions[0]
+        self.assertEqual(action.actor_username, 'b')
+        self.assertEqual(action.verb, 'follow')
+
+    def test_unfollow_creates_action(self):
+        self.follow('a', 'b')
+        self.unfollow('a', 'b')
+        actions = self.action_controller.action_dp.list(
+            actor_username='b',
+            page=0,
+            page_size=10,
+        )
+        self.assertEqual(len(actions), 2)
+
+        action = [a for a in actions if a.verb == 'unfollow'][0]
+        self.assertEqual(action.actor_username, 'b')

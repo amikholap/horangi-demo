@@ -27,13 +27,15 @@ class ActionController(BaseController):
         self.action_dp = action_data_provider
         self.user_dp = user_data_provider
 
-    def create_action(self, actor, verb, object_, target):
+    def create_action(self, actor, verb, object_, target, created_at=None):
         if self.user_dp.get(actor) is None:
             raise self.Error('actor.invalid')
         if target is not None and self.user_dp.get(target) is None:
             raise self.Error('target.invalid')
 
-        created_at = timezone.now()
+        if created_at is None:
+            created_at = timezone.now()
+
         action = self.action_dp.create(
             actor_username=actor,
             created_at=created_at,
@@ -48,14 +50,15 @@ class ActionController(BaseController):
 
         # Created the related action in synchronous manner instead.
         # This can fail and leave related action index inconsistent.
-        self.create_related_action(
-            object_=action.object,
-            created_at=action.created_at,
-            actor=action.actor_username,
-            id_=action.id,
-            verb=action.verb,
-            target=action.target_username,
-        )
+        if action.object is not None:
+            self.create_related_action(
+                object_=action.object,
+                created_at=action.created_at,
+                actor=action.actor_username,
+                id_=action.id,
+                verb=action.verb,
+                target=action.target_username,
+            )
 
         return action
 

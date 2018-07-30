@@ -8,7 +8,7 @@ Follow = collections.namedtuple('Follow', ['followee', 'follower', 'created_at']
 
 class CassandraFollowDataProvider(BaseCassandraDataProvider):
 
-    def get_follow(self, followee, follower):
+    def get(self, followee, follower):
         query = (
             'SELECT followee_username, follower_username, created_at '
             'FROM follow '
@@ -82,7 +82,7 @@ class StubFollowDataProvider(BaseDataProvider):
     def clear(cls):
         cls.follows = collections.defaultdict(set)
 
-    def get_follow(self, followee, follower):
+    def get(self, followee, follower):
         for follow in self.follows[followee]:
             if followee == follower:
                 return follow
