@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: web
-        image: carabas/horangi-demo:latest
+        image: carabas/horangi-demo
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         resources:
@@ -24,3 +25,22 @@ spec:
           requests:
             cpu: "100m"
             memory: "128M"
+      initContainers:
+        - name: init-horangi-demo
+          image: busybox
+          command: ['sh', '-c', 'until nslookup cassandra-0.cassandra.default.svc.cluster.local; do echo waiting for horangi-demo; sleep 5; done;']
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: horangi-demo
+  labels:
+    run: horangi-demo
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8421
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: horangi-demo
