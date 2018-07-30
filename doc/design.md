@@ -157,10 +157,12 @@ Response:
 }
 ```
 
-#### 5. Get related actions for a post.
+#### 5. Get related actions for an object.
+`username` is a name of the user making the query.  
+His or her actions will be filtered out from the output.
 
 Request:  
-```GET /api/posts/{post_id}/related/```
+```GET /api/related-actions/?object={object}&username={username}```
 
 Response:
 ```
@@ -174,9 +176,9 @@ Response:
     },
     {
       "actor": "ivan",
-      "verb": "like",
+      "verb": "share",
       "object": "post:3",
-      "target": "niko"
+      "target": "eric"
     }
   ],
   "status": "success"

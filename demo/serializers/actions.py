@@ -16,6 +16,11 @@ class ActionFeedArgumentsSerializer(BaseSerializer):
     page_size = IntegerField(default=10)
 
 
+class RelatedActionListArgumentSerializer(BaseSerializer):
+    username = CharField()  # username of a user making the query.
+    object = CharField()
+
+
 class ActionSerializer(BaseSerializer):
     actor = CharField(source='actor_username')
     created_at = DateTimeField()

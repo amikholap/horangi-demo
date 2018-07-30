@@ -43,7 +43,29 @@ class ActionController(BaseController):
             target_username=target,
         )
 
-        # At this point the action should be submitted
-        # to a persistent distibuted queue for further async processing like updating caches.
+        # At this point the action should be submitted to a persistent distibuted queue
+        # for further async processing like updating caches and creating related action index.
+
+        # Created the related action in synchronous manner instead.
+        # This can fail and leave related action index inconsistent.
+        self.create_related_action(
+            object_=action.object,
+            created_at=action.created_at,
+            actor=action.actor_username,
+            id_=action.id,
+            verb=action.verb,
+            target=action.target_username,
+        )
 
         return action
+
+    def create_related_action(self, object_, created_at, actor, id_, verb, target):
+        related_action = self.action_dp.create_related(
+            object_=object_,
+            created_at=created_at,
+            actor_username=actor,
+            id_=id_,
+            verb=verb,
+            target_username=target,
+        )
+        return related_action

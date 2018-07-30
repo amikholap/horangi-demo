@@ -21,9 +21,21 @@ followed_at|timestamp
 ### Action
 column|type
 ------|----
-**creator_username**|text
+**actor_username**|text
 *created_at*|timestamp
 id|uuid
 verb|text
 object|text
+target_username|text
+
+
+### Related Action
+This table acts as an index for related actions.  
+column|type
+------|----
+**object**|text
+*actor_username*|text
+*created_at*|timestamp
+id|uuid
+verb|text
 target_username|text
