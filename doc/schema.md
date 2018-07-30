@@ -14,7 +14,7 @@ column|type
 column|type
 ------|----
 **followee_username**|text
-follower_username|text
+**follower_username**|text
 followed_at|timestamp
 
 
