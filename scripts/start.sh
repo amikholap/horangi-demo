@@ -10,7 +10,7 @@ fi
 echo "***** Launching kubernetes services *****"
 kubectl apply -f k8s/
 
-echo "***** Waiting for the application to start. This may take several minutes *****"
+echo "***** Waiting for the application to start. This may take up to ten minutes *****"
 kubectl rollout status deployment/horangi-demo
 
 kubectl exec cassandra-0 -- cqlsh -e "$(cat scripts/init.cql)"
